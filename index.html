@@ -560,6 +560,91 @@
             .cta-group { flex-direction: column; align-items: stretch; text-align: center; }
         }
 
+        /* --- Splash Screen --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+
+        #splash-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #splash-svg {
+            width: 80%;
+            max-width: 800px;
+            height: auto;
+            overflow: visible;
+        }
+
+        .svg-text {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 100px; /* Adjust as needed for viewBox */
+            font-weight: 800;
+            fill: transparent;
+            stroke: var(--primary-color);
+            stroke-width: 2;
+            stroke-dasharray: 1000; /* Large enough to cover the path length */
+            stroke-dashoffset: 1000;
+            animation: drawText 2s ease-out forwards;
+        }
+
+        .svg-text.animate-to-logo {
+            animation: shrinkAndMoveSVG 1.5s ease-in-out forwards;
+        }
+
+        @keyframes drawText {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes shrinkAndMoveSVG {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(-50vw + 40px + 50%), calc(-50vh + 20px + 50%)) scale(0.18); /* Adjust scale and position */
+                opacity: 1;
+            }
+        }
+
+        #loading-bar-container {
+            width: 300px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 30px; /* Space between text and bar */
+            overflow: hidden;
+        }
+
+        #loading-bar-fill {
+            width: 0%;
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+            animation: fillLoadingBar 3s linear forwards; /* Animation duration should match total splash screen time */
+        }
+
+        @keyframes fillLoadingBar {
+            to { width: 100%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         }
 
         /* --- Projects Overlay --- */
@@ -597,6 +682,14 @@
     </style>
 </head>
 <body>
+    <div id="splash-screen">
+        <svg id="splash-svg" viewBox="0 0 800 200">
+            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" class="svg-text">Ethan Peter</text>
+        </svg>
+        <div id="loading-bar-container">
+            <div id="loading-bar-fill"></div>
+        </div>
+    </div>
     <div class="cursor-aura"></div>
     <div class="cursor-dot"></div>
 
@@ -739,7 +832,7 @@
             try {
                 initializeCursor();
                 initializeScrollAnimations();
-                initializeNavigation();
+                // initializeNavigation(); // Comment this out
                 initializeMobileMenu();
                 initializeParallaxEffect();
                 initializeButtonHoverEffect();
@@ -750,10 +843,45 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', initializeWebsite);
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeSplashScreen();
+        });
+
+                function initializeSplashScreen() {
+            const splashScreen = document.getElementById('splash-screen');
+            const svgText = document.querySelector('.svg-text');
+            const loadingBarFill = document.getElementById('loading-bar-fill');
+
+            if (!splashScreen || !svgText || !loadingBarFill) return;
+
+            // The drawText animation is applied via CSS with 'forwards' and starts automatically.
+            // The fillLoadingBar animation is applied via CSS with 'forwards' and starts automatically.
+
+            // After the drawing animation completes, trigger the shrink and move animation
+            setTimeout(() => {
+                svgText.classList.add('animate-to-logo');
+            }, 2500); // After 2s drawText + 0.5s pause
+
+            // After the loading bar completes, fade out the splash screen
+            setTimeout(() => {
+                splashScreen.style.opacity = '0'; // Start fading out the splash screen background
+                loadingBarFill.style.opacity = '0'; // Hide the loading bar fill
+                loadingBarFill.style.transition = 'opacity 0.5s ease'; // Add transition for smooth hide
+                loadingBarFill.parentNode.style.opacity = '0'; // Hide the loading bar container
+                loadingBarFill.parentNode.style.transition = 'opacity 0.5s ease'; // Add transition for smooth hide
+            }, 3000); // Matches loading bar duration
+
+            // After all animations are complete, hide the splash screen completely and initialize website
+            splashScreen.addEventListener('transitionend', () => {
+                if (splashScreen.style.opacity === '0') {
+                    splashScreen.style.display = 'none';
+                    initializeWebsite(); // Initialize the main website
+                }
+            });
+        }
 
         // --- Projects Overlay ---
-        function initializeProjectsOverlay() {
+                function initializeProjectsOverlay() {
             try {
                 const startProjectBtn = document.getElementById('start-project-cta');
                 const projectsOverlay = document.getElementById('projects-overlay');
@@ -776,11 +904,16 @@
                     projectsOverlay.classList.remove('visible');
                 });
 
-                projectsOverlay.addEventListener('click', (e) => {
-                    if (e.target === projectsOverlay) {
-                        projectsOverlay.classList.remove('visible');
-                    }
+                projectsOverlay.addEventListener('mouseleave', () => {
+                    projectsOverlay.classList.remove('visible');
                 });
+
+                // Remove the click outside listener if mouseleave is used
+                // projectsOverlay.addEventListener('click', (e) => {
+                //     if (e.target === projectsOverlay) {
+                //         projectsOverlay.classList.remove('visible');
+                //     }
+                // });
             } catch (error) {
                 console.warn('Projects overlay initialization error:', error);
             }
