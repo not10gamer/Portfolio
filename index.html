@@ -368,7 +368,7 @@
         .card > * {
             position: relative;
             z-index: 2;
-            transition: filter 0.8s ease, opacity 0.8s ease;
+            transition: filter 1.2s ease, opacity 1.2s ease;
         }
         .card:hover {
             transform: translateY(-8px);
@@ -1037,7 +1037,7 @@
                     hoverTimeoutId = setTimeout(() => {
                         visitButton.classList.add('visible');
                         card.classList.add('show-visit-btn');
-                    }, 1000);
+                    }, 500);
                 });
 
                 card.addEventListener('mouseleave', () => {
