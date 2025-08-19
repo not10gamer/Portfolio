@@ -17,7 +17,7 @@
             --background-color: #0B0B0F;
             --text-color: #FFFFFF;
             --text-color-muted: #A0A0A0;
-            --card-bg: #1E1E24;
+            --card-bg: #1A1A1E;
             --border-color: #3A3A40;
             --accent-border-color: rgba(79, 70, 229, 0.3);
         }
@@ -60,7 +60,8 @@
             width: 8px;
             height: 8px;
             background-color: var(--primary-color);
-            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.8s ease;
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.4s ease,
+                        width 0.4s cubic-bezier(0.19, 1, 0.22, 1), height 0.4s cubic-bezier(0.19, 1, 0.22, 1), border-radius 0.4s cubic-bezier(0.19, 1, 0.22, 1);
             box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
         }
         .cursor-aura {
@@ -70,17 +71,27 @@
             backdrop-filter: blur(2px);
             -webkit-backdrop-filter: blur(2px);
             border: 1px solid var(--accent-border-color);
-            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.8s ease;
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.4s ease, opacity 0.4s ease;
         }
         .cursor-dot.hovered {
             transform: translate(-50%, -50%) scale(1.5);
-            background-color: rgba(79, 70, 229, 0.8);
-            box-shadow: 0 0 30px rgba(79, 70, 229, 0.8);
         }
         .cursor-aura.hovered {
             transform: translate(-50%, -50%) scale(1.8);
-            background-color: rgba(79, 70, 229, 0.3);
         }
+        /* ADDED: Cursor fill effect */
+        .cursor-dot.fill-button {
+            width: var(--btn-width);
+            height: var(--btn-height);
+            border-radius: var(--btn-radius);
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .cursor-aura.fill-button {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
 
         /* --- Header & Navigation --- */
         header {
@@ -357,6 +368,7 @@
         .card > * {
             position: relative;
             z-index: 2;
+            transition: filter 0.8s ease, opacity 0.8s ease;
         }
         .card:hover {
             transform: translateY(-8px);
@@ -388,6 +400,40 @@
             font-weight: 600;
             margin-bottom: 20px;
         }
+
+        /* --- UPDATED: Styles for "Visit Now" button --- */
+        .visit-now-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            /* Made button bigger */
+            padding: 1rem 1.8rem;
+            font-size: 1rem;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid var(--accent-color);
+            z-index: 3;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95) translateY(5px);
+            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease, background-color 0.3s ease;
+        }
+        .visit-now-btn:hover {
+            background-color: var(--accent-color);
+        }
+        .visit-now-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateY(0);
+        }
+        .card.show-visit-btn > *:not(.visit-now-btn) {
+            filter: blur(4px);
+            opacity: 0.5;
+        }
+
         .skill-list {
             list-style: none;
         }
@@ -560,7 +606,7 @@
             .cta-group { flex-direction: column; align-items: stretch; text-align: center; }
         }
 
-        /* --- IMPROVED: Splash Screen --- */
+        /* --- Splash Screen --- */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -745,18 +791,21 @@
                         <h3>J.A.R.V.I.S</h3>
                         <div class="project-tags">Python • NLP • AI Chatbot</div>
                         <p>An intelligent conversational AI inspired by Tony Stark's assistant. Built with advanced natural language processing to provide helpful and engaging interactions.</p>
+                        <a href="#" class="visit-now-btn">Visit Now</a>
                     </div>
                     <div class="card animate-on-scroll">
                         <div class="project-icon" aria-hidden="true">😊</div>
                         <h3>Emotion-Adaptive Teacher</h3>
                         <div class="project-tags">Computer Vision • OpenCV • Machine Learning</div>
                         <p>A revolutionary educational tool that uses computer vision to detect student emotions and adapts its teaching approach in real-time for optimal learning outcomes.</p>
+                        <a href="#" class="visit-now-btn">Visit Now</a>
                     </div>
                     <div class="card animate-on-scroll">
                         <div class="project-icon" aria-hidden="true">⚠️</div>
                         <h3>Offense Meter</h3>
                         <div class="project-tags">Web App • Text Analysis • Sentiment AI</div>
                         <p>A web application that analyzes text content and provides real-time offense ratings, helping users communicate more thoughtfully in digital spaces.</p>
+                        <a href="#" class="visit-now-btn">Visit Now</a>
                     </div>
                 </div>
             </div>
@@ -810,7 +859,7 @@
                     <p class="contact-text animate-on-scroll">Ready to bring your AI ideas to life or build that perfect web experience? Let's collaborate on your next project.</p>
                     <a href="mailto:hello@yourdomain.com" id="start-project-cta" class="cta-primary animate-on-scroll"><span>Start a Project</span></a>
                     <div class="social-links animate-on-scroll">
-                        <a href="https://github.com/not10gamer" class="social-link" aria-label="Visit my GitHub profile"><span>GitHub</span></a>
+                        <a href="#" class="social-link" aria-label="Visit my GitHub profile"><span>GitHub</span></a>
                         <a href="#" class="social-link" aria-label="Visit my LinkedIn profile"><span>LinkedIn</span></a>
                         <a href="#" class="social-link" aria-label="Visit my Twitter profile"><span>Twitter</span></a>
                     </div>
@@ -842,7 +891,8 @@
                 initializeParallaxEffect();
                 initializeButtonHoverEffect();
                 initializeProjectsOverlay();
-
+                initializeProjectHovers();
+                initializeCursorFillEffect(); // ADDED: Initialize the new cursor effect
             } catch (error) {
                 console.warn('Error during website initialization:', error);
             }
@@ -853,134 +903,42 @@
             initializeSplashScreen();
         });
 
-        // --- NEW: Particle Canvas Background ---
+        // --- Particle Canvas Background ---
         function initializeParticleCanvas() {
             const canvas = document.getElementById('particle-canvas');
             if (!canvas) return;
-
             const ctx = canvas.getContext('2d');
             let particles = [];
-
-            const resizeCanvas = () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            };
-
+            const resizeCanvas = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
-
             const particleCount = Math.floor((canvas.width * canvas.height) / 20000);
-
             class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 2 + 1;
-                    this.speedX = Math.random() * 1 - 0.5;
-                    this.speedY = Math.random() * 1 - 0.5;
-                }
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-
-                    if (this.x > canvas.width) this.x = 0;
-                    else if (this.x < 0) this.x = canvas.width;
-                    if (this.y > canvas.height) this.y = 0;
-                    else if (this.y < 0) this.y = canvas.height;
-                }
-                draw() {
-                    ctx.fillStyle = 'rgba(79, 70, 229, 0.5)';
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
+                constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 1; this.speedX = Math.random() * 1 - 0.5; this.speedY = Math.random() * 1 - 0.5; }
+                update() { this.x += this.speedX; this.y += this.speedY; if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width; if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height; }
+                draw() { ctx.fillStyle = 'rgba(79, 70, 229, 0.5)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
             }
-
-            const initParticles = () => {
-                particles = [];
-                for (let i = 0; i < particleCount; i++) {
-                    particles.push(new Particle());
-                }
-            };
+            const initParticles = () => { particles = []; for (let i = 0; i < particleCount; i++) { particles.push(new Particle()); } };
             initParticles();
-
-            const animateParticles = () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (const p of particles) {
-                    p.update();
-                    p.draw();
-                }
-                requestAnimationFrame(animateParticles);
-            };
+            const animateParticles = () => { ctx.clearRect(0, 0, canvas.width, canvas.height); for (const p of particles) { p.update(); p.draw(); } requestAnimationFrame(animateParticles); };
             animateParticles();
         }
 
-        // --- IMPROVED: Multi-stage Splash Screen Logic ---
+        // --- Multi-stage Splash Screen Logic ---
         function initializeSplashScreen() {
             const splashScreen = document.getElementById('splash-screen');
             const codeLoader = document.getElementById('code-loader');
             const wipeElement = document.getElementById('wipe-transition');
-
-            if (!splashScreen || !codeLoader || !wipeElement) {
-                if(splashScreen) splashScreen.style.display = 'none';
-                initializeWebsite();
-                return;
-            }
-
-            const initialText = "not10gamer";
-            const finalText = "Ethan Peter";
-            const chars = "ABCDEFGHIJKLMONPQRSTUVWXYZ1234567890*<>";
-            const revealSpeed = 150;
-            const scrambleSpeed = 75;
-            const wipeDuration = 1200;
-            const postWipePause = 1500;
-
-            let scrambleInterval, revealInterval;
-            let step = 0;
-
-            const scramble = (targetText) => {
-                let revealedText = "";
-                for (let i = 0; i < targetText.length; i++) {
-                    if (i < step) revealedText += targetText[i];
-                    else revealedText += chars[Math.floor(Math.random() * chars.length)];
-                }
-                codeLoader.textContent = revealedText;
-            };
-
+            if (!splashScreen || !codeLoader || !wipeElement) { if(splashScreen) splashScreen.style.display = 'none'; initializeWebsite(); return; }
+            const initialText = "not10gamer"; const finalText = "Ethan Peter"; const chars = "ABCDEFGHIJKLMONPQRSTUVWXYZ1234567890*<>"; const revealSpeed = 150; const scrambleSpeed = 75; const wipeDuration = 1200; const postWipePause = 1500;
+            let scrambleInterval, revealInterval; let step = 0;
+            const scramble = (targetText) => { let revealedText = ""; for (let i = 0; i < targetText.length; i++) { if (i < step) revealedText += targetText[i]; else revealedText += chars[Math.floor(Math.random() * chars.length)]; } codeLoader.textContent = revealedText; };
             const startFirstReveal = () => {
-                revealInterval = setInterval(() => {
-                    if (step < initialText.length) {
-                        step++;
-                    } else {
-                        clearInterval(revealInterval);
-                        clearInterval(scrambleInterval);
-                        codeLoader.textContent = initialText;
-                        setTimeout(startWipeTransition, 800);
-                    }
-                }, revealSpeed);
+                revealInterval = setInterval(() => { if (step < initialText.length) { step++; } else { clearInterval(revealInterval); clearInterval(scrambleInterval); codeLoader.textContent = initialText; setTimeout(startWipeTransition, 800); } }, revealSpeed);
                 scrambleInterval = setInterval(() => scramble(initialText), scrambleSpeed);
             };
-
-            const startWipeTransition = () => {
-                codeLoader.classList.add('is-blurring-out');
-                setTimeout(() => {
-                    codeLoader.textContent = finalText;
-                    codeLoader.classList.remove('is-blurring-out');
-                }, wipeDuration / 2);
-                wipeElement.classList.add('animate');
-                setTimeout(fadeOutSplash, wipeDuration + postWipePause);
-            };
-
-            const fadeOutSplash = () => {
-                splashScreen.style.opacity = '0';
-                splashScreen.addEventListener('transitionend', (e) => {
-                    if (e.target === splashScreen) {
-                        splashScreen.style.display = 'none';
-                        initializeWebsite();
-                    }
-                }, { once: true });
-            };
-
+            const startWipeTransition = () => { codeLoader.classList.add('is-blurring-out'); setTimeout(() => { codeLoader.textContent = finalText; codeLoader.classList.remove('is-blurring-out'); }, wipeDuration / 2); wipeElement.classList.add('animate'); setTimeout(fadeOutSplash, wipeDuration + postWipePause); };
+            const fadeOutSplash = () => { splashScreen.style.opacity = '0'; splashScreen.addEventListener('transitionend', (e) => { if (e.target === splashScreen) { splashScreen.style.display = 'none'; initializeWebsite(); } }, { once: true }); };
             startFirstReveal();
         }
 
@@ -989,32 +947,16 @@
             try {
                 const startProjectBtn = document.getElementById('start-project-cta');
                 if (!startProjectBtn) return;
-
-                startProjectBtn.addEventListener('click', (e) => {
-                    console.log("Start a Project button clicked.");
-                });
-
-            } catch (error) {
-                console.warn('Projects overlay initialization error:', error);
-            }
+                startProjectBtn.addEventListener('click', (e) => { console.log("Start a Project button clicked."); });
+            } catch (error) { console.warn('Projects overlay initialization error:', error); }
         }
 
         // --- Button Hover Effect ---
         function initializeButtonHoverEffect() {
             try {
                 const buttons = document.querySelectorAll('.nav-links a, .cta-primary, .cta-secondary, .social-link, .card, .skill-item');
-                buttons.forEach(button => {
-                    button.addEventListener('mousemove', e => {
-                        const rect = button.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        button.style.setProperty('--x', `${x}px`);
-                        button.style.setProperty('--y', `${y}px`);
-                    });
-                });
-            } catch (error) {
-                console.warn('Button hover effect initialization error:', error);
-            }
+                buttons.forEach(button => { button.addEventListener('mousemove', e => { const rect = button.getBoundingClientRect(); const x = e.clientX - rect.left; const y = e.clientY - rect.top; button.style.setProperty('--x', `${x}px`); button.style.setProperty('--y', `${y}px`); }); });
+            } catch (error) { console.warn('Button hover effect initialization error:', error); }
         }
 
         // --- Parallax Effect ---
@@ -1022,94 +964,88 @@
             try {
                 const heroContent = document.querySelector('.hero-content');
                 if (!heroContent) return;
-
-                document.addEventListener('mousemove', (e) => {
-                    const { clientX, clientY } = e;
-                    const x = (clientX / window.innerWidth - 0.5) * 2;
-                    const y = (clientY / window.innerHeight - 0.5) * 2;
-                    heroContent.style.transform = `translateX(${x * -10}px) translateY(${y * -10}px)`;
-                });
-            } catch (error) {
-                console.warn('Parallax effect initialization error:', error);
-            }
+                document.addEventListener('mousemove', (e) => { const { clientX, clientY } = e; const x = (clientX / window.innerWidth - 0.5) * 2; const y = (clientY / window.innerHeight - 0.5) * 2; heroContent.style.transform = `translateX(${x * -10}px) translateY(${y * -10}px)`; });
+            } catch (error) { console.warn('Parallax effect initialization error:', error); }
         }
 
         // --- Custom Cursor Logic ---
         function initializeCursor() {
             try {
+                const cursorDot = document.querySelector('.cursor-dot'); const cursorAura = document.querySelector('.cursor-aura'); if (!cursorDot || !cursorAura) return;
+                window.addEventListener('mousemove', e => { const { clientX, clientY } = e; cursorDot.style.left = `${clientX}px`; cursorDot.style.top = `${clientY}px`; cursorAura.style.left = `${clientX}px`; cursorAura.style.top = `${clientY}px`; });
+                const interactiveElements = document.querySelectorAll('a, button, .card, .chart-container');
+                interactiveElements.forEach(el => { el.addEventListener('mouseenter', () => { cursorDot.classList.add('hovered'); cursorAura.classList.add('hovered'); }); el.addEventListener('mouseleave', () => { cursorDot.classList.remove('hovered'); cursorAura.classList.remove('hovered'); }); });
+            } catch (error) { console.warn('Cursor initialization error:', error); }
+        }
+
+        // --- ADDED: New function for cursor fill effect ---
+        function initializeCursorFillEffect() {
+            try {
                 const cursorDot = document.querySelector('.cursor-dot');
                 const cursorAura = document.querySelector('.cursor-aura');
-                if (!cursorDot || !cursorAura) return;
+                const buttons = document.querySelectorAll('.visit-now-btn');
 
-                window.addEventListener('mousemove', e => {
-                    const { clientX, clientY } = e;
-                    cursorDot.style.left = `${clientX}px`;
-                    cursorDot.style.top = `${clientY}px`;
-                    cursorAura.style.left = `${clientX}px`;
-                    cursorAura.style.top = `${clientY}px`;
-                });
-
-                const interactiveElements = document.querySelectorAll('a, button, .card, .chart-container');
-                interactiveElements.forEach(el => {
-                    el.addEventListener('mouseenter', () => {
-                        cursorDot.classList.add('hovered');
-                        cursorAura.classList.add('hovered');
+                buttons.forEach(button => {
+                    button.addEventListener('mouseenter', () => {
+                        const rect = button.getBoundingClientRect();
+                        cursorDot.style.setProperty('--btn-width', `${rect.width}px`);
+                        cursorDot.style.setProperty('--btn-height', `${rect.height}px`);
+                        cursorDot.style.setProperty('--btn-radius', window.getComputedStyle(button).borderRadius);
+                        cursorDot.classList.add('fill-button');
+                        cursorAura.classList.add('fill-button');
                     });
-                    el.addEventListener('mouseleave', () => {
-                        cursorDot.classList.remove('hovered');
-                        cursorAura.classList.remove('hovered');
+                    button.addEventListener('mouseleave', () => {
+                        cursorDot.classList.remove('fill-button');
+                        cursorAura.classList.remove('fill-button');
                     });
                 });
-            } catch (error)
-                {
-                console.warn('Cursor initialization error:', error);
+            } catch(error) {
+                console.warn('Cursor fill effect initialization error:', error);
             }
         }
 
         // --- Scroll Animation Logic ---
         function initializeScrollAnimations() {
             try {
-                const animatedElements = document.querySelectorAll('.animate-on-scroll');
-                if (animatedElements.length === 0) return;
-
+                const animatedElements = document.querySelectorAll('.animate-on-scroll'); if (animatedElements.length === 0) return;
                 if ('IntersectionObserver' in window) {
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('animated');
-                                observer.unobserve(entry.target);
-                            }
-                        });
-                    }, { threshold: 0.1 });
-
+                    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('animated'); observer.unobserve(entry.target); } }); }, { threshold: 0.1 });
                     animatedElements.forEach(el => observer.observe(el));
-                } else {
-                    animatedElements.forEach(el => el.classList.add('animated'));
-                }
-            } catch (error) {
-                console.warn('Scroll animations error:', error);
-            }
+                } else { animatedElements.forEach(el => el.classList.add('animated')); }
+            } catch (error) { console.warn('Scroll animations error:', error); }
         }
 
         // --- Mobile Menu Toggle ---
         function initializeMobileMenu() {
             try {
-                const menuToggle = document.querySelector('.menu-toggle');
-                const navLinks = document.querySelector('.nav-links');
-                if (!menuToggle || !navLinks) return;
+                const menuToggle = document.querySelector('.menu-toggle'); const navLinks = document.querySelector('.nav-links'); if (!menuToggle || !navLinks) return;
+                menuToggle.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+                navLinks.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('active'); }); });
+            } catch (error) { console.warn('Mobile menu initialization error:', error); }
+        }
 
-                menuToggle.addEventListener('click', () => {
-                    navLinks.classList.toggle('active');
+        // --- Logic for the project hover ---
+        function initializeProjectHovers() {
+            const projectCards = document.querySelectorAll('#projects .card');
+            projectCards.forEach(card => {
+                let hoverTimeoutId = null;
+                const visitButton = card.querySelector('.visit-now-btn');
+
+                if (!visitButton) return;
+
+                card.addEventListener('mouseenter', () => {
+                    hoverTimeoutId = setTimeout(() => {
+                        visitButton.classList.add('visible');
+                        card.classList.add('show-visit-btn');
+                    }, 1000);
                 });
 
-                navLinks.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        navLinks.classList.remove('active');
-                    });
+                card.addEventListener('mouseleave', () => {
+                    clearTimeout(hoverTimeoutId);
+                    visitButton.classList.remove('visible');
+                    card.classList.remove('show-visit-btn');
                 });
-            } catch (error) {
-                console.warn('Mobile menu initialization error:', error);
-            }
+            });
         }
     </script>
 
