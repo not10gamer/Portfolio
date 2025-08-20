@@ -8,7 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
 
     <style>
@@ -34,13 +34,26 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--background-color);
             color: var(--text-color);
             line-height: 1.4;
             overflow-x: hidden;
             cursor: none;
-            transition: background-color 0.5s ease;
+            /* UPDATED: New animated background with moving dots */
+            background-color: var(--background-color);
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.2), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(79, 70, 229, 0.15), transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(67, 56, 202, 0.1), transparent 40%);
+            background-size: 200% 200%;
+            animation: move-dots 25s ease-in-out infinite alternate;
         }
+
+        /* ADDED: Keyframes for the dot animation */
+        @keyframes move-dots {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
 
         a, button, .project-card, .skill-item, .chart-container {
             cursor: none;
@@ -79,39 +92,31 @@
         .cursor-aura.hovered {
             transform: translate(-50%, -50%) scale(1.8);
         }
-        /* ADDED: Cursor fill effect */
-        .cursor-dot.fill-button {
-            width: var(--btn-width);
-            height: var(--btn-height);
-            border-radius: var(--btn-radius);
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translate(-50%, -50%) scale(1);
-        }
-        .cursor-aura.fill-button {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1);
-        }
 
-
-        /* --- Header & Navigation --- */
+        /* --- UPDATED: Header --- */
         header {
             position: fixed;
-            top: 0;
-            width: 100%;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            /* Made slightly wider */
+            width: calc(100% - 20px);
+            max-width: 1400px;
             z-index: 1000;
-            background: rgba(11, 11, 15, 0.85);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px rgba(79, 70, 229, 0.1);
+            background: rgba(11, 11, 15, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 12px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             transition: all 0.4s ease;
         }
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1400px;
+            width: 100%;
             margin: 0 auto;
             padding: 0 40px;
         }
@@ -125,52 +130,28 @@
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 20px;
+            gap: 15px;
         }
         .nav-links li {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-        }
-        .nav-links li:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.25);
         }
         .nav-links a {
             color: var(--text-color);
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: background-color 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             padding: 12px 20px;
             display: block;
             position: relative;
             z-index: 2;
+            border-radius: 16px;
         }
-        .nav-links li::before {
-            content: '';
-            position: absolute;
-            top: var(--y, 50%);
-            left: var(--x, 50%);
-            transform: translate(-50%, -50%) scale(0);
-            width: 300px;
-            height: 300px;
+        .nav-links a:hover {
             background-color: var(--primary-color);
-            border-radius: 50%;
-            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-            z-index: 1;
-        }
-        .nav-links li:hover::before {
-            transform: translate(-50%, -50%) scale(1);
-        }
-        .nav-links li:hover a {
-            color: #fff;
         }
 
         /* --- Mobile Menu --- */
@@ -199,11 +180,7 @@
             align-items: center;
             padding: 120px 40px 60px;
             position: relative;
-            background:
-                radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.15), transparent 40%),
-                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05), transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(79, 70, 229, 0.08), transparent 50%),
-                linear-gradient(135deg, #0B0B0F 0%, #1a1a2e 100%);
+            background: none;
         }
         .hero-container {
             max-width: 1400px;
@@ -368,7 +345,7 @@
         .card > * {
             position: relative;
             z-index: 2;
-            transition: filter 1.2s ease, opacity 1.2s ease;
+            transition: filter 0.8s ease, opacity 0.8s ease;
         }
         .card:hover {
             transform: translateY(-8px);
@@ -399,30 +376,52 @@
             letter-spacing: 1px;
             font-weight: 600;
             margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        .card:hover .project-tags span {
+            display: inline-block;
+            transform: translateY(-2px);
         }
 
-        /* --- UPDATED: Styles for "Visit Now" button --- */
+        /* --- "Visit Now" button --- */
         .visit-now-btn {
             position: absolute;
             top: 20px;
             right: 20px;
-            background-color: var(--primary-color);
+            background-color: transparent;
             color: var(--text-color);
-            /* Made button bigger */
+            border: 1px solid var(--accent-color);
             padding: 1rem 1.8rem;
             font-size: 1rem;
             border-radius: 16px;
             text-decoration: none;
             font-weight: 600;
-            border: 1px solid var(--accent-color);
             z-index: 3;
             opacity: 0;
             visibility: hidden;
             transform: scale(0.95) translateY(5px);
-            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease, background-color 0.3s ease;
+            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease, color 0.4s ease;
+            overflow: hidden;
         }
-        .visit-now-btn:hover {
+        .visit-now-btn span {
+            position: relative;
+            z-index: 2;
+        }
+        .visit-now-btn::before {
+            content: '';
+            position: absolute;
+            top: var(--y, 50%);
+            left: var(--x, 50%);
+            width: 250px;
+            height: 250px;
             background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 1;
+        }
+        .visit-now-btn:hover::before {
+            transform: translate(-50%, -50%) scale(1);
         }
         .visit-now-btn.visible {
             opacity: 1;
@@ -485,7 +484,7 @@
 
         /* --- Contact & Footer --- */
         .contact-section {
-            background: radial-gradient(circle at 60% 40%, rgba(79, 70, 229, 0.08), transparent 50%), var(--background-color);
+            background: none;
             text-align: center;
         }
         .contact-container {
@@ -549,13 +548,22 @@
             border-color: var(--primary-color);
             transform: translateY(-3px);
         }
+
+        /* UPDATED: Footer */
         footer {
-            padding: 40px;
+            /* Made slightly wider */
+            width: calc(100% - 20px);
+            max-width: 1400px;
+            margin: 60px auto 40px auto;
             text-align: center;
-            background: rgba(79, 70, 229, 0.05);
-            border-top: 1px solid var(--accent-border-color);
+            /* More transparent background with blur */
+            background: rgba(26, 26, 30, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
             color: var(--text-color-muted);
-            margin-top: 60px;
+            padding: 20px 40px;
+            border-radius: 24px;
         }
 
         /* --- Animations --- */
@@ -579,6 +587,7 @@
 
         /* --- Media Queries for Responsiveness --- */
         @media (max-width: 768px) {
+            header { width: calc(100% - 20px); top: 10px; }
             nav { padding: 0 20px; }
             .menu-toggle { display: flex; }
             .nav-links {
@@ -604,6 +613,7 @@
             .grid { grid-template-columns: 1fr; }
             .chart-wrapper { height: 250px; }
             .cta-group { flex-direction: column; align-items: stretch; text-align: center; }
+            footer { width: calc(100% - 20px); }
         }
 
         /* --- Splash Screen --- */
@@ -631,39 +641,19 @@
             height: 100%;
             z-index: 1;
         }
-        #scan-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            background: linear-gradient(
-                to bottom,
-                rgba(11, 11, 15, 0),
-                rgba(11, 11, 15, 0) 49.5%,
-                rgba(255, 255, 255, 0.05) 50%,
-                rgba(11, 11, 15, 0) 50.5%,
-                rgba(11, 11, 15, 0)
-            );
-            background-size: 100% 8px;
-            animation: scan 10s linear infinite;
-        }
-        @keyframes scan {
-            from { background-position-y: 0; }
-            to { background-position-y: 200px; }
-        }
 
-        #code-loader-wrapper {
+        .splash-content {
             position: relative;
             z-index: 3;
+            text-align: center;
+        }
+        #code-loader-wrapper {
             animation: pulsate-glow 4s ease-in-out infinite;
         }
         @keyframes pulsate-glow {
             0%, 100% { filter: drop-shadow(0 0 20px rgba(79, 70, 229, 0.5)); }
             50% { filter: drop-shadow(0 0 35px rgba(79, 70, 229, 0.7)); }
         }
-
         #code-loader {
             font-family: 'JetBrains Mono', monospace;
             font-size: clamp(1.5rem, 8vw, 5rem);
@@ -671,15 +661,28 @@
             color: var(--text-color);
             letter-spacing: 0.05em;
             white-space: pre;
-            text-align: center;
-            transition: opacity 0.4s ease-in-out, filter 0.4s ease-in-out, transform 0.4s ease-in-out;
+            min-height: 1.2em;
+            transition: opacity 0.3s ease-in-out;
         }
-        .is-blurring-out {
-            opacity: 0 !important;
-            filter: blur(8px);
-            transform: scale(0.9);
+        #splash-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            color: var(--text-color-muted);
+            margin-top: 1rem;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid var(--text-color-muted);
+            animation: blink-caret 0.75s step-end infinite;
         }
-
+        #splash-subtitle.visible {
+            opacity: 1;
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--text-color-muted); }
+        }
         #wipe-transition {
             position: absolute;
             top: 0;
@@ -736,8 +739,11 @@
     <div id="splash-screen">
         <canvas id="particle-canvas"></canvas>
         <div id="scan-line"></div>
-        <div id="code-loader-wrapper">
-            <div id="code-loader" aria-label="Loading name animation"></div>
+        <div class="splash-content">
+            <div id="code-loader-wrapper">
+                <div id="code-loader" aria-label="Loading name animation"></div>
+            </div>
+            <div id="splash-subtitle"></div>
         </div>
         <div id="wipe-transition"></div>
     </div>
@@ -789,23 +795,23 @@
                     <div class="card animate-on-scroll">
                         <div class="project-icon" aria-hidden="true">🤖</div>
                         <h3>J.A.R.V.I.S</h3>
-                        <div class="project-tags">Python • NLP • AI Chatbot</div>
+                        <div class="project-tags"><span>Python</span><span>NLP</span><span>AI Chatbot</span></div>
                         <p>An intelligent conversational AI inspired by Tony Stark's assistant. Built with advanced natural language processing to provide helpful and engaging interactions.</p>
-                        <a href="#" class="visit-now-btn">Visit Now</a>
+                        <a href="#" class="visit-now-btn"><span>Visit Now</span></a>
                     </div>
                     <div class="card animate-on-scroll">
                         <div class="project-icon" aria-hidden="true">😊</div>
                         <h3>Emotion-Adaptive Teacher</h3>
-                        <div class="project-tags">Computer Vision • OpenCV • Machine Learning</div>
+                        <div class="project-tags"><span>Computer Vision</span><span>OpenCV</span><span>ML</span></div>
                         <p>A revolutionary educational tool that uses computer vision to detect student emotions and adapts its teaching approach in real-time for optimal learning outcomes.</p>
-                        <a href="#" class="visit-now-btn">Visit Now</a>
+                        <a href="#" class="visit-now-btn"><span>Visit Now</span></a>
                     </div>
                     <div class="card animate-on-scroll">
                         <div class="project-icon" aria-hidden="true">⚠️</div>
                         <h3>Offense Meter</h3>
-                        <div class="project-tags">Web App • Text Analysis • Sentiment AI</div>
+                        <div class="project-tags"><span>Web App</span><span>Text Analysis</span><span>AI</span></div>
                         <p>A web application that analyzes text content and provides real-time offense ratings, helping users communicate more thoughtfully in digital spaces.</p>
-                        <a href="#" class="visit-now-btn">Visit Now</a>
+                        <a href="#" class="visit-now-btn"><span>Visit Now</span></a>
                     </div>
                 </div>
             </div>
@@ -892,7 +898,6 @@
                 initializeButtonHoverEffect();
                 initializeProjectsOverlay();
                 initializeProjectHovers();
-                initializeCursorFillEffect(); // ADDED: Initialize the new cursor effect
             } catch (error) {
                 console.warn('Error during website initialization:', error);
             }
@@ -924,21 +929,89 @@
             animateParticles();
         }
 
-        // --- Multi-stage Splash Screen Logic ---
+        // --- REVERTED & IMPROVED Splash Screen Logic ---
         function initializeSplashScreen() {
             const splashScreen = document.getElementById('splash-screen');
             const codeLoader = document.getElementById('code-loader');
             const wipeElement = document.getElementById('wipe-transition');
-            if (!splashScreen || !codeLoader || !wipeElement) { if(splashScreen) splashScreen.style.display = 'none'; initializeWebsite(); return; }
-            const initialText = "not10gamer"; const finalText = "Ethan Peter"; const chars = "ABCDEFGHIJKLMONPQRSTUVWXYZ1234567890*<>"; const revealSpeed = 150; const scrambleSpeed = 75; const wipeDuration = 1200; const postWipePause = 1500;
-            let scrambleInterval, revealInterval; let step = 0;
-            const scramble = (targetText) => { let revealedText = ""; for (let i = 0; i < targetText.length; i++) { if (i < step) revealedText += targetText[i]; else revealedText += chars[Math.floor(Math.random() * chars.length)]; } codeLoader.textContent = revealedText; };
+            const subtitle = document.getElementById('splash-subtitle');
+
+            if (!splashScreen || !codeLoader || !wipeElement || !subtitle) {
+                if(splashScreen) splashScreen.style.display = 'none';
+                initializeWebsite();
+                return;
+            }
+
+            const initialText = "not10gamer";
+            const finalText = "Ethan Peter";
+            const subtitleText = "AI Developer & Creator";
+            const chars = "ABCDEFGHIJKLMONPQRSTUVWXYZ1234567890*<>";
+            const revealSpeed = 150;
+            const scrambleSpeed = 75;
+            const wipeDuration = 1200;
+
+            let scrambleInterval, revealInterval;
+            let step = 0;
+
+            const scramble = (targetText) => {
+                let revealedText = "";
+                for (let i = 0; i < targetText.length; i++) {
+                    if (i < step) revealedText += targetText[i];
+                    else revealedText += chars[Math.floor(Math.random() * chars.length)];
+                }
+                codeLoader.textContent = revealedText;
+            };
+
+            const typeSubtitle = () => {
+                subtitle.classList.add('visible');
+                let i = 0;
+                const typingInterval = setInterval(() => {
+                    if (i < subtitleText.length) {
+                        subtitle.textContent += subtitleText.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(typingInterval);
+                        subtitle.style.animation = 'none';
+                        subtitle.style.borderRightColor = 'var(--text-color-muted)';
+                        setTimeout(fadeOutSplash, 1200);
+                    }
+                }, 100);
+            };
+
             const startFirstReveal = () => {
-                revealInterval = setInterval(() => { if (step < initialText.length) { step++; } else { clearInterval(revealInterval); clearInterval(scrambleInterval); codeLoader.textContent = initialText; setTimeout(startWipeTransition, 800); } }, revealSpeed);
+                revealInterval = setInterval(() => {
+                    if (step < initialText.length) {
+                        step++;
+                    } else {
+                        clearInterval(revealInterval);
+                        clearInterval(scrambleInterval);
+                        codeLoader.textContent = initialText;
+                        setTimeout(startWipeTransition, 800);
+                    }
+                }, revealSpeed);
                 scrambleInterval = setInterval(() => scramble(initialText), scrambleSpeed);
             };
-            const startWipeTransition = () => { codeLoader.classList.add('is-blurring-out'); setTimeout(() => { codeLoader.textContent = finalText; codeLoader.classList.remove('is-blurring-out'); }, wipeDuration / 2); wipeElement.classList.add('animate'); setTimeout(fadeOutSplash, wipeDuration + postWipePause); };
-            const fadeOutSplash = () => { splashScreen.style.opacity = '0'; splashScreen.addEventListener('transitionend', (e) => { if (e.target === splashScreen) { splashScreen.style.display = 'none'; initializeWebsite(); } }, { once: true }); };
+
+            const startWipeTransition = () => {
+                codeLoader.classList.add('is-blurring-out');
+                setTimeout(() => {
+                    codeLoader.textContent = finalText;
+                    codeLoader.classList.remove('is-blurring-out');
+                }, wipeDuration / 2);
+                wipeElement.classList.add('animate');
+                setTimeout(typeSubtitle, wipeDuration);
+            };
+
+            const fadeOutSplash = () => {
+                splashScreen.style.opacity = '0';
+                splashScreen.addEventListener('transitionend', (e) => {
+                    if (e.target === splashScreen) {
+                        splashScreen.style.display = 'none';
+                        initializeWebsite();
+                    }
+                }, { once: true });
+            };
+
             startFirstReveal();
         }
 
@@ -954,7 +1027,7 @@
         // --- Button Hover Effect ---
         function initializeButtonHoverEffect() {
             try {
-                const buttons = document.querySelectorAll('.nav-links a, .cta-primary, .cta-secondary, .social-link, .card, .skill-item');
+                const buttons = document.querySelectorAll('.nav-links a, .cta-primary, .cta-secondary, .social-link, .card, .skill-item, .visit-now-btn');
                 buttons.forEach(button => { button.addEventListener('mousemove', e => { const rect = button.getBoundingClientRect(); const x = e.clientX - rect.left; const y = e.clientY - rect.top; button.style.setProperty('--x', `${x}px`); button.style.setProperty('--y', `${y}px`); }); });
             } catch (error) { console.warn('Button hover effect initialization error:', error); }
         }
@@ -976,32 +1049,6 @@
                 const interactiveElements = document.querySelectorAll('a, button, .card, .chart-container');
                 interactiveElements.forEach(el => { el.addEventListener('mouseenter', () => { cursorDot.classList.add('hovered'); cursorAura.classList.add('hovered'); }); el.addEventListener('mouseleave', () => { cursorDot.classList.remove('hovered'); cursorAura.classList.remove('hovered'); }); });
             } catch (error) { console.warn('Cursor initialization error:', error); }
-        }
-
-        // --- ADDED: New function for cursor fill effect ---
-        function initializeCursorFillEffect() {
-            try {
-                const cursorDot = document.querySelector('.cursor-dot');
-                const cursorAura = document.querySelector('.cursor-aura');
-                const buttons = document.querySelectorAll('.visit-now-btn');
-
-                buttons.forEach(button => {
-                    button.addEventListener('mouseenter', () => {
-                        const rect = button.getBoundingClientRect();
-                        cursorDot.style.setProperty('--btn-width', `${rect.width}px`);
-                        cursorDot.style.setProperty('--btn-height', `${rect.height}px`);
-                        cursorDot.style.setProperty('--btn-radius', window.getComputedStyle(button).borderRadius);
-                        cursorDot.classList.add('fill-button');
-                        cursorAura.classList.add('fill-button');
-                    });
-                    button.addEventListener('mouseleave', () => {
-                        cursorDot.classList.remove('fill-button');
-                        cursorAura.classList.remove('fill-button');
-                    });
-                });
-            } catch(error) {
-                console.warn('Cursor fill effect initialization error:', error);
-            }
         }
 
         // --- Scroll Animation Logic ---
