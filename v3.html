@@ -441,9 +441,8 @@
         .visit-now-initial {
             background-color: var(--primary-color);
             color: #fff;
-            /* MODIFIED: Increased button size */
-            padding: 0.9rem 1.8rem;
-            font-size: 0.95rem;
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
             border-radius: 50px;
             font-weight: 600;
             box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
@@ -526,6 +525,7 @@
         }
 
         /* --- Contact & Footer --- */
+        /* MODIFIED: Re-centered contact section */
         .contact-section {
             text-align: center;
         }
@@ -540,7 +540,7 @@
         }
         .social-links {
             display: flex;
-            justify-content: center;
+            justify-content: center; /* MODIFIED: Center social links */
             gap: 20px;
             margin-top: 50px;
             flex-wrap: wrap;
@@ -607,7 +607,7 @@
             transition: all 0.4s ease;
         }
 
-        /* --- Project Form Modal Styles --- */
+        /* --- ADDED: Project Form Modal Styles --- */
         #project-form-modal {
             position: fixed;
             inset: 0;
@@ -637,7 +637,6 @@
             transition: transform 0.5s ease, opacity 0.5s ease;
             transform: scale(0.95);
             opacity: 0;
-            position: relative;
         }
         #project-form-modal.active #contact-form {
             transform: scale(1);
@@ -675,26 +674,24 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px var(--accent-border-color);
         }
-        #contact-form button[type="submit"] {
+        #contact-form button {
             width: 100%;
             margin-top: 10px;
-            animation: pulsate-glow 3s ease-in-out infinite;
         }
         .close-form-btn {
             position: absolute;
             top: 20px;
-            right: 25px;
+            right: 20px;
             font-size: 32px;
             color: var(--text-color);
             background: transparent;
             border: none;
             cursor: none;
             z-index: 10;
-            transition: transform 0.3s ease, color 0.3s ease;
+            transition: transform 0.3s ease;
         }
         .close-form-btn:hover {
             transform: scale(1.1) rotate(90deg);
-            color: var(--primary-color);
         }
 
 
@@ -712,12 +709,8 @@
             opacity: 1;
             transform: scale(1);
         }
-        @keyframes pulsate-glow {
-            0%, 100% { box-shadow: 0 8px 32px rgba(79, 70, 229, 0.4); }
-            50% { box-shadow: 0 8px 45px rgba(79, 70, 229, 0.6); }
-        }
 
-        /* --- Improved Splash Screen Styles --- */
+        /* --- Smoother Splash Screen Styles --- */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -738,7 +731,6 @@
             opacity: 0;
             visibility: hidden;
         }
-
         #particle-canvas {
             position: absolute;
             top: 0;
@@ -753,35 +745,18 @@
             text-align: center;
         }
         #splash-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 600;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 800;
             color: var(--text-color);
             margin-bottom: 1rem;
-            display: inline-block; /* Required for cursor */
-            position: relative;
+            animation: fadeInAndUp 1.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
         }
-        #splash-title::after {
-            content: '_';
-            position: absolute;
-            right: -0.5em;
-            animation: blink-caret 0.75s step-end infinite;
-        }
-
         #splash-subtitle {
             font-family: 'JetBrains Mono', monospace;
             font-size: clamp(1rem, 2vw, 1.5rem);
             color: var(--text-color-muted);
+            animation: fadeInAndUp 1.2s cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s forwards;
             opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-        #splash-subtitle.visible {
-            opacity: 1;
-        }
-
-        @keyframes blink-caret {
-            from, to { opacity: 0; }
-            50% { opacity: 1; }
         }
 
         /* --- Media Queries for Responsiveness --- */
@@ -828,7 +803,7 @@
     <div id="splash-screen">
         <canvas id="particle-canvas"></canvas>
         <div class="splash-content">
-            <h1 id="splash-title"></h1>
+            <h1 id="splash-title">Ethan Peter</h1>
             <p id="splash-subtitle">AI Developer & Creator</p>
         </div>
     </div>
@@ -1014,7 +989,7 @@
                 initializeButtonHoverEffect();
                 initializeProjectHovers();
                 initializeRippleEffect();
-                initializeProjectFormAnimation();
+                initializeProjectFormAnimation(); // ADDED: Initialize form animation
             } catch (error) {
                 console.warn('Error during website initialization:', error);
             }
@@ -1046,45 +1021,22 @@
             animateParticles();
         }
 
-        // --- Improved Splash Screen Logic ---
+        // --- Smoother Splash Screen Logic ---
         function initializeSplashScreen() {
             const splashScreen = document.getElementById('splash-screen');
-            const splashTitle = document.getElementById('splash-title');
-            const splashSubtitle = document.getElementById('splash-subtitle');
-
-            if (!splashScreen || !splashTitle || !splashSubtitle) {
+            if (!splashScreen) {
                 initializeWebsite();
                 return;
             }
-
-            const nameText = "Ethan Peter";
-            let i = 0;
-            splashTitle.innerHTML = ""; // Clear existing text
-
-            function typeWriter() {
-                if (i < nameText.length) {
-                    splashTitle.innerHTML += nameText.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 150); // Speed of typing
-                } else {
-                    // Typing finished
-                    splashTitle.style.borderRight = "none"; // Hide cursor
-                    splashSubtitle.classList.add('visible');
-
-                    // Fade out entire splash screen
-                    setTimeout(() => {
-                        splashScreen.classList.add('fade-out');
-                        splashScreen.addEventListener('transitionend', (e) => {
-                            if (e.target === splashScreen && e.propertyName === 'opacity') {
-                                splashScreen.style.display = 'none';
-                                initializeWebsite();
-                            }
-                        }, { once: true });
-                    }, 1200); // Wait after subtitle appears
-                }
-            }
-
-            setTimeout(typeWriter, 500); // Initial delay before typing starts
+            setTimeout(() => {
+                splashScreen.classList.add('fade-out');
+                splashScreen.addEventListener('transitionend', (e) => {
+                    if (e.target === splashScreen) {
+                        splashScreen.style.display = 'none';
+                        initializeWebsite();
+                    }
+                }, { once: true });
+            }, 2500);
         }
 
         // --- Ripple Effect for Header Buttons ---
@@ -1109,7 +1061,7 @@
             });
         }
 
-        // --- Project Form Animation Logic ---
+        // --- ADDED: Project Form Animation Logic ---
         function initializeProjectFormAnimation() {
             const openBtn = document.getElementById('start-project-cta');
             const modal = document.getElementById('project-form-modal');
