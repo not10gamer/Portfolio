@@ -39,18 +39,15 @@
             overflow-x: hidden;
             cursor: none;
             background-color: var(--background-color);
-            /* MODIFIED: Changed colors and sped up animation */
-            background-image:
-                radial-gradient(circle at 15% 50%, rgba(229, 70, 147, 0.2), transparent 30%), /* Magenta */
-                radial-gradient(circle at 85% 30%, rgba(70, 229, 211, 0.15), transparent 40%), /* Teal */
-                radial-gradient(circle at 50% 90%, rgba(79, 70, 229, 0.1), transparent 40%); /* Original Primary Blue */
-            background-size: 200% 200%;
-            animation: move-dots 15s ease-in-out infinite alternate; /* Sped up from 25s */
         }
 
-        @keyframes move-dots {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
+        #procedural-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
 
@@ -72,24 +69,27 @@
             width: 8px;
             height: 8px;
             background-color: var(--primary-color);
-            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.4s ease,
-                        width 0.4s cubic-bezier(0.19, 1, 0.22, 1), height 0.4s cubic-bezier(0.19, 1, 0.22, 1), border-radius 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1), height 0.4s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.4s ease;
             box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
         }
         .cursor-aura {
             width: 40px;
             height: 40px;
-            background-color: rgba(79, 70, 229, 0.2);
+            background-color: rgba(79, 70, 229, 0.1);
             backdrop-filter: blur(2px);
             -webkit-backdrop-filter: blur(2px);
             border: 1px solid var(--accent-border-color);
-            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.4s ease, opacity 0.4s ease;
+            transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1), height 0.4s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.4s ease;
+            box-shadow: 0 0 30px 10px rgba(79, 70, 229, 0.2);
         }
         .cursor-dot.hovered {
-            transform: translate(-50%, -50%) scale(1.5);
+            width: 12px;
+            height: 12px;
         }
         .cursor-aura.hovered {
-            transform: translate(-50%, -50%) scale(1.8);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(79, 70, 229, 0.2);
         }
 
         /* --- Header --- */
@@ -497,33 +497,86 @@
             transform: translateX(28px);
         }
 
-        /* --- Minimalistic Skills Section Styles --- */
-        .skills-container {
+        /* --- Expertise Section Styles --- */
+        .skills-list {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
+            flex-direction: column;
             gap: 1rem;
-            max-width: 1000px;
         }
-
-        .skill-tag {
-            font-family: 'JetBrains Mono', monospace;
-            padding: 10px 20px;
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            font-size: 15px;
+        .skill-item {
+            position: relative;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .skill-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 25px rgba(79, 70, 229, 0.3);
+        }
+        .skill-name {
+            display: block;
+            font-weight: 500;
             color: var(--text-color-muted);
-            background: rgba(20, 20, 24, 0.5);
-            transition: all 0.3s ease;
+            margin-bottom: 12px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .skill-bar-wrapper {
+            width: 100%;
+            height: 6px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .skill-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color) 0%, #a8a5ff 100%);
+            border-radius: 3px;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.3s;
+        }
+        .animate-on-scroll.animated .skill-bar {
+            transform: scaleX(1);
         }
 
-        .skill-tag:hover {
-            color: var(--text-color);
-            border-color: var(--primary-color);
-            background-color: var(--primary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+        /* Ripple Effect for Skill Items */
+        .skill-item::before,
+        .skill-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid var(--accent-border-color);
+            width: 100%;
+            padding-bottom: 100%;
+            opacity: 0;
+            animation: ripple-wave 3s infinite linear;
+            transition: opacity 0.4s ease;
         }
+        .skill-item::after {
+            animation-delay: 1.5s;
+        }
+        @keyframes ripple-wave {
+            0% {
+                transform: translate(-50%, -50%) scale(0.9);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.4);
+                opacity: 0;
+            }
+        }
+        .skill-item:hover::before,
+        .skill-item:hover::after {
+            opacity: 0;
+            animation: none;
+        }
+
 
         /* --- Contact & Footer --- */
         .contact-section {
@@ -678,7 +731,6 @@
         #contact-form button[type="submit"] {
             width: 100%;
             margin-top: 10px;
-            animation: pulsate-glow 3s ease-in-out infinite;
         }
         .close-form-btn {
             position: absolute;
@@ -711,10 +763,6 @@
         .animate-on-scroll.animated {
             opacity: 1;
             transform: scale(1);
-        }
-        @keyframes pulsate-glow {
-            0%, 100% { box-shadow: 0 8px 32px rgba(79, 70, 229, 0.4); }
-            50% { box-shadow: 0 8px 45px rgba(79, 70, 229, 0.6); }
         }
 
         /* --- Splash Screen --- */
@@ -843,6 +891,8 @@
     </style>
 </head>
 <body>
+    <canvas id="procedural-background"></canvas>
+
     <div id="splash-screen">
         <canvas id="particle-canvas"></canvas>
         <div class="splash-content">
@@ -954,22 +1004,82 @@
             <div class="container">
                 <h2 class="section-title animate-on-scroll">Expertise</h2>
                 <p class="section-subtitle animate-on-scroll">A comprehensive toolkit for building next-generation AI applications and web experiences.</p>
-                <div class="skills-container animate-on-scroll">
-                    <span class="skill-tag">Python Programming</span>
-                    <span class="skill-tag">TensorFlow & PyTorch</span>
-                    <span class="skill-tag">Natural Language Processing</span>
-                    <span class="skill-tag">Computer Vision</span>
-                    <span class="skill-tag">Deep Learning</span>
-                    <span class="skill-tag">JavaScript & TypeScript</span>
-                    <span class="skill-tag">React & Node.js</span>
-                    <span class="skill-tag">CSS & Animations</span>
-                    <span class="skill-tag">Responsive Design</span>
-                    <span class="skill-tag">API Development</span>
-                    <span class="skill-tag">Git & GitHub</span>
-                    <span class="skill-tag">Docker & Cloud Deploy</span>
-                    <span class="skill-tag">Jupyter Notebooks</span>
-                    <span class="skill-tag">Data Visualization</span>
-                    <span class="skill-tag">Database Management</span>
+                <div class="grid">
+                    <div class="card animate-on-scroll">
+                        <h3>AI & Machine Learning</h3>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Python Programming</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 95%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Deep Learning</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 88%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">TensorFlow & PyTorch</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 85%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Natural Language Processing</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 80%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Computer Vision</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 75%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card animate-on-scroll">
+                        <h3>Web Development</h3>
+                        <div class="skills-list">
+                             <div class="skill-item">
+                                <span class="skill-name">CSS & Animations</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 92%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">JavaScript & TypeScript</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 90%;"></div></div>
+                            </div>
+                             <div class="skill-item">
+                                <span class="skill-name">API Development</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 88%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">React & Node.js</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 85%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Responsive Design</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 95%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card animate-on-scroll">
+                        <h3>Tools & Platforms</h3>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Git & GitHub</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 98%;"></div></div>
+                            </div>
+                             <div class="skill-item">
+                                <span class="skill-name">Jupyter Notebooks</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 90%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Data Visualization</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 80%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Docker & Cloud Deploy</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 70%;"></div></div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Database Management</span>
+                                <div class="skill-bar-wrapper"><div class="skill-bar" style="width: 75%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1006,7 +1116,7 @@
                 <label for="message">Project Details</label>
                 <textarea id="message" name="message" rows="5" required></textarea>
             </div>
-            <button type="submit" class="cta-primary"><span>Submit Inquiry</span></button>
+            <button type="submit" class="cta-secondary"><span>Submit Inquiry</span></button>
         </form>
     </div>
 
@@ -1041,9 +1151,100 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            initializeProceduralBackground();
             initializeParticleCanvas();
             initializeSplashScreen();
         });
+
+        // --- Procedural Background Logic ---
+        function initializeProceduralBackground() {
+            const canvas = document.getElementById('procedural-background');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let blobs = [];
+            const blobCount = 7;
+
+            const setCanvasDimensions = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = document.body.scrollHeight;
+            };
+
+            window.addEventListener('resize', setCanvasDimensions);
+
+            class Blob {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.radius = Math.random() * 400 + 400;
+                    this.vx = (Math.random() - 0.5) * 1.5;
+                    this.vy = (Math.random() - 0.5) * 1.5;
+                    this.maxLife = Math.random() * 1000 + 1200;
+                    this.life = this.maxLife;
+                    this.alpha = 0;
+
+                    this.hueStart = Math.random() * 90 + 240;
+                    this.hueRange = 30;
+                    this.color = {
+                        h: this.hueStart,
+                        s: 70,
+                        l: 50
+                    };
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.life--;
+
+                    if (this.x + this.radius > canvas.width || this.x - this.radius < 0) this.vx *= -1;
+                    if (this.y + this.radius > canvas.height || this.y - this.radius < 0) this.vy *= -1;
+
+                    const lifeProgress = (this.maxLife - this.life) / this.maxLife;
+
+                    this.color.h = this.hueStart + Math.sin(lifeProgress * Math.PI) * this.hueRange;
+
+                    this.alpha = 0.2 * Math.sin(lifeProgress * Math.PI);
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+                    const colorString = `hsla(${this.color.h}, ${this.color.s}%, ${this.color.l}%, ${this.alpha})`;
+                    const transparentString = `hsla(${this.color.h}, ${this.color.s}%, ${this.color.l}%, 0)`;
+
+                    gradient.addColorStop(0, colorString);
+                    gradient.addColorStop(1, transparentString);
+
+                    ctx.fillStyle = gradient;
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            function createBlobs() {
+                blobs = [];
+                for (let i = 0; i < blobCount; i++) {
+                    blobs.push(new Blob());
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                blobs.forEach((blob, index) => {
+                    blob.update();
+                    blob.draw();
+                    if (blob.life <= 0) {
+                        blobs[index] = new Blob();
+                    }
+                });
+                requestAnimationFrame(animate);
+            }
+
+            setCanvasDimensions();
+            createBlobs();
+            animate();
+        }
+
 
         // --- Particle Canvas Background ---
         function initializeParticleCanvas() {
@@ -1214,12 +1415,49 @@
         // --- Custom Cursor Logic ---
         function initializeCursor() {
             try {
-                const cursorDot = document.querySelector('.cursor-dot'); const cursorAura = document.querySelector('.cursor-aura'); if (!cursorDot || !cursorAura) return;
-                window.addEventListener('mousemove', e => { const { clientX, clientY } = e; cursorDot.style.left = `${clientX}px`; cursorDot.style.top = `${clientY}px`; cursorAura.style.left = `${clientX}px`; cursorAura.style.top = `${clientY}px`; });
-                const interactiveElements = document.querySelectorAll('a, button, .card, .chart-container, .skill-tag');
-                interactiveElements.forEach(el => { el.addEventListener('mouseenter', () => { cursorDot.classList.add('hovered'); cursorAura.classList.add('hovered'); }); el.addEventListener('mouseleave', () => { cursorDot.classList.remove('hovered'); cursorAura.classList.remove('hovered'); }); });
-            } catch (error) { console.warn('Cursor initialization error:', error); }
+                const cursorDot = document.querySelector('.cursor-dot');
+                const cursorAura = document.querySelector('.cursor-aura');
+                if (!cursorDot || !cursorAura) return;
+
+                let mouseX = 0, mouseY = 0;
+                let auraX = 0, auraY = 0;
+                const lagAmount = 0.2; // Lower number = more lag
+
+                window.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                });
+
+                const animateCursor = () => {
+                    // Move the dot directly
+                    cursorDot.style.transform = `translate(${mouseX - (cursorDot.offsetWidth / 2)}px, ${mouseY - (cursorDot.offsetHeight / 2)}px)`;
+
+                    // Move the aura with a delay (linear interpolation)
+                    auraX += (mouseX - auraX) * lagAmount;
+                    auraY += (mouseY - auraY) * lagAmount;
+                    cursorAura.style.transform = `translate(${auraX - (cursorAura.offsetWidth / 2)}px, ${auraY - (cursorAura.offsetHeight / 2)}px)`;
+
+                    requestAnimationFrame(animateCursor);
+                };
+
+                animateCursor();
+
+                const interactiveElements = document.querySelectorAll('a, button, .card, .chart-container, .skill-tag, .skill-item');
+                interactiveElements.forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        cursorDot.classList.add('hovered');
+                        cursorAura.classList.add('hovered');
+                    });
+                    el.addEventListener('mouseleave', () => {
+                        cursorDot.classList.remove('hovered');
+                        cursorAura.classList.remove('hovered');
+                    });
+                });
+            } catch (error) {
+                console.warn('Cursor initialization error:', error);
+            }
         }
+
 
         // --- Scroll Animation Logic ---
         function initializeScrollAnimations() {
