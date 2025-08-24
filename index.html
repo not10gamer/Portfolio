@@ -351,7 +351,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: fadeInUp 1.2s ease-out;
+            animation: fadeInUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             text-shadow: 0 0 5px rgba(79, 70, 229, 0.3), 0 0 10px rgba(79, 70, 229, 0.2);
         }
         body.light-mode .hero h1 {
@@ -362,7 +362,7 @@
             font-weight: 600;
             color: var(--text-color-muted);
             margin-bottom: 40px;
-            animation: fadeInUp 1.4s ease-out;
+            animation: fadeInUp 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             letter-spacing: 3px;
             text-transform: uppercase;
         }
@@ -373,7 +373,7 @@
             color: var(--text-color);
             margin-bottom: 50px;
             max-width: 600px;
-            animation: fadeInUp 1.6s ease-out;
+            animation: fadeInUp 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
         /* --- CTA Buttons --- */
@@ -381,7 +381,7 @@
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
-            animation: fadeInUp 1.8s ease-out;
+            animation: fadeInUp 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
         .cta-primary, .cta-secondary {
             padding: 18px 40px;
@@ -523,8 +523,14 @@
             transform: translate(-50%, -50%) scale(1);
         }
         .card .project-icon, .card .project-tags, .card > p {
-            transition: filter 0.5s ease-out;
+            transition: filter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
+        .card.is-hovered .project-icon,
+        .card.is-hovered .project-tags,
+        .card.is-hovered > p {
+            filter: blur(4px);
+        }
+
 
         .card > *:not(.visit-wrapper) {
             position: relative;
@@ -582,10 +588,10 @@
             opacity: 0;
             visibility: hidden;
             transform: scale(0.95) translateY(5px);
-            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.4s ease 0.1s, visibility 0.4s ease 0.1s, transform 0.4s ease 0.1s;
         }
 
-        .visit-wrapper.visible {
+        .card.is-hovered .visit-wrapper {
             opacity: 1;
             visibility: visible;
             transform: scale(1) translateY(0);
@@ -851,7 +857,7 @@
         #contact-form, .skill-modal-content {
             transform: scale(0.95);
             opacity: 0;
-            transition: transform 0.5s ease 0.2s, opacity 0.5s ease 0.2s;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s, opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s;
         }
         #project-form-modal.active #contact-form,
         #skill-details-modal.active .skill-modal-content {
@@ -964,9 +970,15 @@
 
 
         /* --- Animations --- */
-        @keyframes fadeInAndUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 40px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
         .animate-on-scroll {
             opacity: 0;
@@ -991,7 +1003,7 @@
             align-items: center;
             z-index: 99999;
             opacity: 1;
-            transition: opacity 0.8s ease-out 0.5s; /* Added delay to transition */
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
         }
         #intro-canvas {
             max-width: 100%;
@@ -1543,8 +1555,12 @@
 
             const moveIndicator = (indicator, element) => {
                 if (!element) return;
-                indicator.style.width = `${element.offsetWidth}px`;
-                indicator.style.left = `${element.offsetLeft}px`;
+                // FIX: The 'element' is the <a> tag. Its offsetLeft is relative to the parent <li>, which is 0.
+                // We need the offset of the <li> relative to the <ul> (.nav-links).
+                // Therefore, we use element.parentElement to get the <li> for correct positioning.
+                const targetListItem = element.parentElement;
+                indicator.style.width = `${targetListItem.offsetWidth}px`;
+                indicator.style.left = `${targetListItem.offsetLeft}px`;
             };
 
             setTimeout(() => {
@@ -1744,41 +1760,12 @@
         }
 
 
-        // --- Logic for the project hover ---
+        // --- REFINED: Logic for the project hover ---
         function initializeProjectHovers() {
             const projectCards = document.querySelectorAll('#projects .card');
-
             projectCards.forEach(card => {
-                let hoverTimeoutId = null;
-                let blurIntervalId = null;
-                let blurValue = 0;
-                const elementsToBlur = card.querySelectorAll('.project-icon, .project-tags, p');
-
-                const visitWrapper = card.querySelector('.visit-wrapper');
-                if (!visitWrapper) return;
-
-                card.addEventListener('mouseenter', () => {
-                    hoverTimeoutId = setTimeout(() => {
-                        visitWrapper.classList.add('visible');
-                    }, 300);
-
-                    clearInterval(blurIntervalId);
-                    blurIntervalId = setInterval(() => {
-                        if (blurValue < 8) {
-                            blurValue += 0.5;
-                            elementsToBlur.forEach(el => el.style.filter = `blur(${blurValue}px)`);
-                        }
-                    }, 80);
-                });
-
-                card.addEventListener('mouseleave', () => {
-                    clearTimeout(hoverTimeoutId);
-                    visitWrapper.classList.remove('visible');
-
-                    clearInterval(blurIntervalId);
-                    blurValue = 0;
-                    elementsToBlur.forEach(el => el.style.filter = 'none');
-                });
+                card.addEventListener('mouseenter', () => card.classList.add('is-hovered'));
+                card.addEventListener('mouseleave', () => card.classList.remove('is-hovered'));
             });
         }
 
