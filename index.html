@@ -454,9 +454,23 @@
             fill: #fff;
         }
 
+        /* --- View All Projects Button Wrapper --- */
+        .view-all-wrapper {
+            text-align: center;
+            margin-top: 0;
+            white-space: nowrap;
+        }
+
         /* --- General Section & Content Styling --- */
         .section {
             padding: 140px 60px; /* Increased padding */
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 80px;
         }
         .section-title {
             font-size: clamp(3rem, 8vw, 6rem);
@@ -470,7 +484,7 @@
         .section-subtitle {
             font-size: 20px;
             color: var(--text-color-muted);
-            margin-bottom: 80px;
+            margin-bottom: 0;
             max-width: 800px;
             line-height: 1.7;
         }
@@ -513,15 +527,6 @@
         }
         .card:hover::before {
             transform: translate(-50%, -50%) scale(1);
-        }
-        /* POLISHED: Blur effect on card content for visit button focus */
-        .card .project-icon, .card .project-tags, .card > p {
-            transition: filter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .card.is-hovered .project-icon,
-        .card.is-hovered .project-tags,
-        .card.is-hovered > p {
-            filter: blur(4px);
         }
 
         .card > *:not(.visit-wrapper) {
@@ -570,23 +575,22 @@
         /* --- POLISHED: Split Button Styles --- */
         .visit-wrapper {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Center the wrapper */
+            top: 40px;
+            right: 40px;
             z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;
             opacity: 0;
             visibility: hidden;
-            transform: translate(-50%, -50%) scale(0.95);
+            transform: translateY(10px) scale(0.95);
             transition: opacity 0.4s ease 0.1s, visibility 0.4s ease 0.1s, transform 0.4s ease 0.1s;
         }
 
         .card.is-hovered .visit-wrapper {
             opacity: 1;
             visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
+            transform: translateY(0) scale(1);
         }
 
         .visit-now-initial {
@@ -685,11 +689,10 @@
         }
         .skill-bar {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary-color) 0%, #a8a5ff 100%);
             border-radius: 3px;
             transform-origin: left;
             transform: scaleX(0);
-            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.3s;
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.3s, background 0.5s ease;
         }
         .animate-on-scroll.animated .skill-bar {
             transform: scaleX(1);
@@ -1100,6 +1103,14 @@
                 gap: 20px;
                 width: calc(100% - 20px);
             }
+            .section-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .section-subtitle {
+                margin-bottom: 40px;
+            }
         }
     </style>
 </head>
@@ -1161,21 +1172,41 @@
                         </a>
                     </div>
                 </div>
-            </section>
+        </section>
 
         <section id="projects" class="section">
             <div class="container">
-                <h2 class="section-title animate-on-scroll">Featured Projects</h2>
-                <p class="section-subtitle animate-on-scroll">
-                    Innovative AI solutions that push boundaries and solve real-world challenges.
-                </p>
+                <div class="section-header">
+                    <div class="section-header-text">
+                        <h2 class="section-title animate-on-scroll">Featured Projects</h2>
+                        <p class="section-subtitle animate-on-scroll">
+                            Innovative AI solutions that push boundaries and solve real-world challenges.
+                        </p>
+                    </div>
+                    <div class="view-all-wrapper animate-on-scroll">
+                         <a href="#" class="cta-secondary" target="_blank"><span>View All Projects</span></a>
+                    </div>
+                </div>
+
                 <div class="grid">
                     <!-- Project Card 1 -->
                     <div class="card animate-on-scroll">
+                        <div class="visit-wrapper">
+                            <div class="visit-now-initial"><span>Visit Now</span></div>
+                            <a href="#" class="split-btn site-btn" target="_blank" aria-label="Visit live site">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.665l3-3z"></path><path d="M8.603 14.53a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 005.656 5.656l3-3a4 4 0 00-.225-5.865.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.665l-3 3z"></path></svg>
+                            </a>
+                            <a href="#" class="split-btn github-btn" target="_blank" aria-label="View source code">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0020 10c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg>
+                            </a>
+                        </div>
                         <div class="project-icon" aria-hidden="true">🤖</div>
                         <h3>J.A.R.V.I.S</h3>
                         <div class="project-tags"><span>Python</span><span>NLP</span><span>AI Chatbot</span></div>
                         <p>An intelligent conversational AI inspired by Tony Stark's assistant. Built with advanced natural language processing to provide helpful and engaging interactions.</p>
+                    </div>
+                    <!-- Project Card 2 -->
+                    <div class="card animate-on-scroll">
                         <div class="visit-wrapper">
                             <div class="visit-now-initial"><span>Visit Now</span></div>
                             <a href="#" class="split-btn site-btn" target="_blank" aria-label="Visit live site">
@@ -1185,13 +1216,13 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0020 10c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg>
                             </a>
                         </div>
-                    </div>
-                    <!-- Project Card 2 -->
-                    <div class="card animate-on-scroll">
                          <div class="project-icon" aria-hidden="true">😊</div>
                         <h3>Emotion-Adaptive Teacher</h3>
                         <div class="project-tags"><span>Computer Vision</span><span>OpenCV</span><span>ML</span></div>
                         <p>A revolutionary educational tool that uses computer vision to detect student emotions and adapts its teaching approach in real-time for optimal learning outcomes.</p>
+                    </div>
+                    <!-- Project Card 3 -->
+                    <div class="card animate-on-scroll">
                         <div class="visit-wrapper">
                             <div class="visit-now-initial"><span>Visit Now</span></div>
                             <a href="#" class="split-btn site-btn" target="_blank" aria-label="Visit live site">
@@ -1201,22 +1232,10 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0020 10c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg>
                             </a>
                         </div>
-                    </div>
-                    <!-- Project Card 3 -->
-                    <div class="card animate-on-scroll">
                         <div class="project-icon" aria-hidden="true">⚠️</div>
                         <h3>Offense Meter</h3>
                         <div class="project-tags"><span>Web App</span><span>Text Analysis</span><span>AI</span></div>
                         <p>A web application that analyzes text content and provides real-time offense ratings, helping users communicate more thoughtfully in digital spaces.</p>
-                        <div class="visit-wrapper">
-                            <div class="visit-now-initial"><span>Visit Now</span></div>
-                            <a href="#" class="split-btn site-btn" target="_blank" aria-label="Visit live site">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.665l3-3z"></path><path d="M8.603 14.53a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 005.656 5.656l3-3a4 4 0 00-.225-5.865.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.665l-3 3z"></path></svg>
-                            </a>
-                            <a href="#" class="split-btn github-btn" target="_blank" aria-label="View source code">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0020 10c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg>
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1377,6 +1396,7 @@
                 initializeSkillModal();
                 initializeScrollGlowEffect();
                 initializeThemeSwitcher();
+                initializeSkillBarColors(); // <-- New function call
             } catch (error) {
                 console.warn('Error during website initialization:', error);
             }
@@ -1386,6 +1406,40 @@
             initializeProceduralBackground();
             initializeSplashScreen();
         });
+
+        // --- NEW: Skill Bar Color Logic ---
+        function initializeSkillBarColors() {
+            const skillItems = document.querySelectorAll('.skill-item');
+            if (!skillItems.length) return;
+
+            const getSkillBarGradient = (percentage) => {
+                let startColor, endColor;
+                if (percentage <= 40) {
+                    // Muted, developing skill color (blue-ish)
+                    startColor = 'hsl(220, 50%, 60%)';
+                    endColor = 'hsl(220, 60%, 75%)';
+                } else if (percentage <= 80) {
+                    // Proficient skill color (primary purple)
+                    startColor = 'hsl(243, 80%, 65%)'; // Corresponds to --primary-color
+                    endColor = 'hsl(243, 90%, 80%)';
+                } else {
+                    // Mastery skill color (brighter, warmer purple/magenta)
+                    startColor = 'hsl(260, 85%, 60%)';
+                    endColor = 'hsl(280, 90%, 75%)';
+                }
+                return `linear-gradient(90deg, ${startColor} 0%, ${endColor} 100%)`;
+            };
+
+            skillItems.forEach(item => {
+                const skillBar = item.querySelector('.skill-bar');
+                if (skillBar && skillBar.style.width) {
+                    const percentage = parseInt(skillBar.style.width, 10);
+                    if (!isNaN(percentage)) {
+                        skillBar.style.background = getSkillBarGradient(percentage);
+                    }
+                }
+            });
+        }
 
         // --- Procedural Background Logic ---
         function initializeProceduralBackground() {
@@ -1412,7 +1466,15 @@
                     this.maxLife = Math.random() * 1000 + 1200;
                     this.life = this.maxLife;
                     this.alpha = 0;
-                    this.hueStart = Math.random() * 90 + 240;
+
+                    if (Math.random() < 0.4) { // 40% chance for blue
+                        // Blue/Cyan range
+                        this.hueStart = Math.random() * 60 + 180;
+                    } else {
+                        // Original Purple/Pink range
+                        this.hueStart = Math.random() * 90 + 240;
+                    }
+
                     this.hueRange = 30;
                     this.color = { h: this.hueStart, s: 70, l: 50 };
                 }
